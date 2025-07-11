@@ -1,6 +1,6 @@
 
 import { obtenerUsuario } from "./http-provider";
-
+import { Usuario } from "./classes/Usuario";
 
 const body  = document.body;
 
@@ -27,12 +27,6 @@ const crearHtml = () => {
     div.innerHTML = html;
     body.appendChild( div );
 
-    
-    const refTBody = document.querySelector('tbody');
-    console.log(refTBody);
-
-    
-
     // Crear una referencia al TBODY
     // ya que los TRs van dentro del tbody
             // querySelector('tbody');
@@ -57,11 +51,11 @@ const crearFilaUsuario = ( usuario ) => {
     // También deben de colocar el avatar
 
     const html = `
-        <td scope="col"> 1. </td>
-        <td scope="col"> michael.lawson@reqres.in </td>
-        <td scope="col"> Michael Lawson </td>
+        <td scope="col"> ${usuario.idContador} </td>
+        <td scope="col"> ${usuario.email} </td>
+        <td scope="col"> ${usuario.first_name}</td>
         <td scope="col">
-            <img class="img-thumbnail" src="">
+            <img class="img-thumbnail" src="${usuario.avatar}">
         </td>
     `;
 
@@ -69,24 +63,26 @@ const crearFilaUsuario = ( usuario ) => {
     tr.innerHTML = html;
 
     // Añadir el table row (tr) dentro del TBody creado anteriormente
+    const refTBody = document.querySelector('tbody');
+    console.log(refTBody);
 
+    refTBody.append(tr);
 }
 
 
 
 export const init = async() => {
-    let contador = 0;
     crearHtml();
     
     //obtener la lista de usuarios
     const usuariosArr = await obtenerUsuario().then();
     
-    console.log(usuariosArr);
-    // usuario.forEach( usuario => {
-    //     console.log(usuario);
-    // });
+    usuariosArr.forEach( ({id,email,first_name,avatar}) => {
+        //crear un usuario 
+        let usuarioActual = new Usuario(id,email,first_name,avatar);
+        crearFilaUsuario(usuarioActual);
+    });
     
-
     // Obtener la lista de usuarios usando el servicio creado
     // Por cada usuario, llamar la función crearFila (for, forEach)
     // Colocar el init en el index.js, para que se ejecute la creación
