@@ -1,8 +1,10 @@
 
 import { obtenerUsuario } from "./http-provider";
-import { Usuario } from "./classes/Usuario";
+
 
 const body  = document.body;
+let tbody;
+let correlativo = 0;
 
 const crearHtml = () => {
     
@@ -31,6 +33,7 @@ const crearHtml = () => {
     // ya que los TRs van dentro del tbody
             // querySelector('tbody');
             // Crear una variable para mantener la referencia?
+    tbody = document.querySelector('tbody');
 
 }
 
@@ -49,9 +52,10 @@ const crearFilaUsuario = ( usuario ) => {
 
     // En la tabla deben de colocar un correlativo empezando en 1
     // También deben de colocar el avatar
+    correlativo++;
 
     const html = `
-        <td scope="col"> ${usuario.idContador} </td>
+        <td scope="col"> ${correlativo} </td>
         <td scope="col"> ${usuario.email} </td>
         <td scope="col"> ${usuario.first_name}  ${usuario.last_name}</td>
         <td scope="col">
@@ -63,29 +67,22 @@ const crearFilaUsuario = ( usuario ) => {
     tr.innerHTML = html;
 
     // Añadir el table row (tr) dentro del TBody creado anteriormente
-    const refTBody = document.querySelector('tbody');
-    console.log(refTBody);
-
-    refTBody.append(tr);
+    tbody.append(tr);
 }
 
 
 
 export const init = async() => {
     crearHtml();
-    
-    //obtener la lista de usuarios
-    const usuariosArr = await obtenerUsuario();
-    
-    usuariosArr.forEach( ({id,email,first_name, last_name,avatar}) => {
-        //crear un usuario 
-        let usuarioActual = new Usuario(id,email,first_name, last_name,avatar);
-        crearFilaUsuario(usuarioActual);
-    });
+    correlativo = 0;
     
     // Obtener la lista de usuarios usando el servicio creado
     // Por cada usuario, llamar la función crearFila (for, forEach)
     // Colocar el init en el index.js, para que se ejecute la creación
 
+    // const usuarios = await obtenerUsuario();
+    // usuarios.array.forEach(crearFilaUsuario);
+
+    (await obtenerUsuario()).forEach(crearFilaUsuario);
 }
 
