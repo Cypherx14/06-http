@@ -3,6 +3,7 @@ import { obtenerUsuario } from "./http-provider";
 import { Usuario } from "./classes/Usuario";
 
 const body  = document.body;
+let refTBody;
 
 const crearHtml = () => {
     
@@ -31,6 +32,7 @@ const crearHtml = () => {
     // ya que los TRs van dentro del tbody
             // querySelector('tbody');
             // Crear una variable para mantener la referencia?
+    refTBody = document.querySelector('tbody');
 
 }
 
@@ -63,9 +65,8 @@ const crearFilaUsuario = ( usuario ) => {
     tr.innerHTML = html;
 
     // Añadir el table row (tr) dentro del TBody creado anteriormente
-    const refTBody = document.querySelector('tbody');
-    console.log(refTBody);
-
+    // const refTBody = document.querySelector('tbody');
+    // console.log(refTBody);
     refTBody.append(tr);
 }
 
@@ -86,6 +87,7 @@ export const init = async() => {
     // Obtener la lista de usuarios usando el servicio creado
     // Por cada usuario, llamar la función crearFila (for, forEach)
     // Colocar el init en el index.js, para que se ejecute la creación
+
 
 }
 
