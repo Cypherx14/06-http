@@ -16,6 +16,12 @@ const urlUsuario = 'https://reqres.in/api/users?page=2';
 //         console.log(value);
 //     });
 
+//Cloudinary
+const cloudPreset = 'rufrvp1h';
+const cloudUrl = 'https://api.cloudinary.com/v1_1/dvfexchfq/upload';
+
+
+
 const obtenerChiste = async () => {
     try {
         const resp = await fetch(jokeUrl);
@@ -34,6 +40,8 @@ const obtenerChiste = async () => {
     }
 }
 
+
+//usuarios
 const obtenerUsuario = async( ) => {
     
     const resp = await fetch(urlUsuario, {
@@ -44,10 +52,34 @@ const obtenerUsuario = async( ) => {
     
 } 
 
+//carga de imagenes a cloudinary archivoSubir: File
+const subirImagen = async (archivoSubir) => {
+    const formData = new FormData();
+    formData.append('upload_preset', cloudPreset);
+    formData.append('file', archivoSubir);
+    try {
+        const resp = await fetch(cloudUrl, {
+            method: 'POST',
+            body: formData
+        });
+        if(resp.ok) {
+            const cloudResp = await resp.json();
+            console.log(cloudResp);
+            return cloudResp.secure_url;
+            
+        }else{
+            throw await resp.json();
+        }
+    } catch (error) {
+        throw error;
+    }
+}
+
 
 
 
 export {
     obtenerChiste,
-    obtenerUsuario
+    obtenerUsuario,
+    subirImagen
 }
